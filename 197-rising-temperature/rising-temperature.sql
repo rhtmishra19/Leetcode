@@ -17,20 +17,23 @@
 --         where Lag(temperature,1,0) over(order by recorddate) > temperature
 
 
--- SELECT id, recordDate, temperature, prev_temperature
--- FROM (
---     SELECT 
---         id, 
---         recordDate, 
---         temperature, 
---         LAG(temperature, 1, 0) OVER (ORDER BY recordDate) AS prev_temperature
---     FROM Weather
--- ) 
--- WHERE prev_temperature > temperature;
+SELECT id
+FROM (
+    SELECT 
+        id, 
+        recordDate, 
+        temperature, 
+        LAG(temperature, 1) OVER (ORDER BY recordDate) AS prev_temperature,
+        LAG(recordDate, 1) OVER (ORDER BY recordDate) as pre_Date
+    FROM Weather
+) sub
+WHERE temperature > prev_temperature 
+and
+    Datediff(recordDate, pre_date) = 1;
 
-SELECT today.id
-FROM Weather yesterday 
-CROSS JOIN Weather today
+-- SELECT today.id
+-- FROM Weather yesterday 
+-- CROSS JOIN Weather today
 
-WHERE DATEDIFF(today.recordDate,yesterday.recordDate) = 1
-    AND today.temperature > yesterday.temperature
+-- WHERE DATEDIFF(today.recordDate,yesterday.recordDate) = 1
+--     AND today.temperature > yesterday.temperature
