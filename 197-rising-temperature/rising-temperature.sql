@@ -23,8 +23,8 @@ FROM (
         id, 
         recordDate, 
         temperature, 
-        LAG(temperature, 1) OVER (ORDER BY recordDate) AS prev_temperature,
-        LAG(recordDate, 1) OVER (ORDER BY recordDate) as pre_Date
+        LAG(temperature, 1,0) OVER (ORDER BY recordDate) AS prev_temperature,
+        LAG(recordDate, 1,0) OVER (ORDER BY recordDate) as pre_Date
     FROM Weather
 ) sub
 WHERE temperature > prev_temperature 
